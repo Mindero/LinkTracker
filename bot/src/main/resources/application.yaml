@@ -1,6 +1,10 @@
 app:
   telegram-token: ${TELEGRAM_TOKEN} # env variable
 
+scrapper:
+  port: 8081
+
+
 spring:
   application:
     name: Bot
@@ -13,6 +17,7 @@ spring:
 
 server:
   port: 8080
+
 
 springdoc:
   swagger-ui:
