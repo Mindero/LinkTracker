@@ -1,15 +1,18 @@
 package backend.academy.bot.service;
 
 import backend.academy.bot.controller.dto.AddLinkRequest;
+import backend.academy.bot.controller.dto.ListLinkResponse;
 import backend.academy.bot.controller.dto.RemoveLinkRequest;
 import backend.academy.bot.repo.link.Link;
 import backend.academy.bot.repo.link.RepoLink;
 import backend.academy.bot.repo.state.RepoState;
 import backend.academy.bot.repo.state.StateFSM;
 import backend.academy.bot.controller.ScrapperController;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class BotService {
@@ -28,11 +31,14 @@ public class BotService {
     public String handle(Long id, String text) {
         StateFSM state = repoState.getState(id);
         if (state.equals(StateFSM.TAGS)) return trackTag(id, text);
-        if (state.equals(StateFSM.FILTER)) return trackFilter(id, text);
+        if (state.equals(StateFSM.FILTER)){
+            trackFilter(id, text);
+            return track(id);
+        }
         if (text.startsWith("/start"))   return start(id);
         if (text.startsWith("/help"))    return help();
         if (text.startsWith("/track"))   return trackLink(id, deleteCommand(text));
-        if (text.startsWith("/untrack")) return untrack(id, deleteCommand(text));
+        if (text.startsWith("/unTrack")) return unTrack(id, deleteCommand(text));
         if (text.startsWith("/list"))    return list(id);
         return "Пу-пу-пу... я не понимаю ваше сообщение";
     }
@@ -51,44 +57,52 @@ public class BotService {
     }
 
     // TODO: add help
-    private String help(){
+    public String help(){
         return "Help";
     }
 
-    private String start(Long id){
+    public String start(Long id){
         scrapperController.addChat(id);
         repoState.setState(id, StateFSM.COOL);
         return "Здравствуйте!";
     }
 
-    private String trackLink(Long id, String link){
+    public String trackLink(Long id, String link){
         repoLink.addUrl(id, link);
         repoState.setState(id, StateFSM.TAGS);
         return "Введите тэги (опционально)";
     }
-    private String trackTag(Long id, String text){
+    public String trackTag(Long id, String text){
         repoLink.addTags(id, Arrays.stream(text.split(" ")).toList());
         repoState.setState(id, StateFSM.FILTER);
-        return "Настройте фильтры (опционально)";
+        return "Введите фильтры (опционально)";
     }
 
-    public String trackFilter(Long id, String text){
+    public void trackFilter(Long id, String text){
         repoLink.addFilters(id, Arrays.stream(text.split(" ")).toList());
         repoState.setState(id, StateFSM.COOL);
+    }
 
+    public String track(Long id) {
         Link link = repoLink.getLastChatLink(id);
         scrapperController.track(id,
             new AddLinkRequest(link.url(), link.tags(), link.filters()));
         return "Ссылка успешно добавлена";
     }
 
-    private String untrack(Long id, String link){
+    public String unTrack(Long id, String link){
         scrapperController.untrack(id, new RemoveLinkRequest(link));
         return "Ссылка удалена";
     }
 
-    private String list (Long id){
-        return "Пу-пу-пу\n" + scrapperController.getLinkList(id);
+    public String list (Long id){
+        ListLinkResponse response = scrapperController.getLinkList(id);
+        List<String> urls = response.links()
+            .stream()
+            .map(ListLinkResponse.Link::url)
+            .toList();
+        if (urls.isEmpty()) return "Список ссылок пустой";
+        return "Ваш список ссылок:\n" + String.join("\n", urls);
     }
 
 }
