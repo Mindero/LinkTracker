@@ -45,7 +45,14 @@ public class BotController {
         Long chatId = update.message().chat().id();
         String text = update.message().text();
 
-        String message = service.handle(chatId, text);
-        bot.execute(new SendMessage(chatId, message));
+        try{
+            String message = service.handle(chatId, text);
+            bot.execute(new SendMessage(chatId, message));
+        }
+        catch (RuntimeException e){
+            System.out.println("Ошибка обработки сообщения: " + e.getMessage());
+            e.printStackTrace();
+            bot.execute(new SendMessage(chatId, "Произошла ошибка:\n" + e.getMessage()));
+        }
     }
 }
