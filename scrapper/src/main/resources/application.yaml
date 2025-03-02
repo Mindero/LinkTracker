@@ -4,6 +4,9 @@ app:
     key: ${SO_TOKEN_KEY}
     access-token: ${SO_ACCESS_TOKEN}
 
+bot:
+  port: 8080
+
 spring:
   application:
     name: Scrapper
