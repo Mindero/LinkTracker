@@ -2,6 +2,7 @@ package backend.academy.scrapper.service.sdk;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import java.util.regex.Matcher;
@@ -13,7 +14,7 @@ public class StackOverflowSDK implements LinkSDK{
     private static final String API_PREFIX = "https://api.stackexchange.com/2.3/";
     private final RestClient restClient;
 
-    public StackOverflowSDK(@Autowired RestClient restClient) {
+    public StackOverflowSDK(@Autowired @Qualifier("SDK") RestClient restClient) {
         this.restClient = restClient;
     }
 
@@ -38,5 +39,10 @@ public class StackOverflowSDK implements LinkSDK{
             .exchange((request, response) -> response.getStatusCode().is2xxSuccessful());
         System.out.println("Result of stackOverflow " + result + "\n" + url);
         return result;
+    }
+
+    @Override
+    public boolean haveUpdate(String url, Long lastUpdate) {
+        return false;
     }
 }

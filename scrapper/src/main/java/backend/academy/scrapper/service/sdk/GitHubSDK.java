@@ -1,6 +1,7 @@
 package backend.academy.scrapper.service.sdk;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -10,7 +11,7 @@ public class GitHubSDK implements LinkSDK{
     private static final String PREFIX = "https://github.com/";
     private final RestClient restClient;
 
-    public GitHubSDK(@Autowired RestClient restClient) {
+    public GitHubSDK(@Autowired @Qualifier("SDK") RestClient restClient) {
         this.restClient = restClient;
     }
 
@@ -23,5 +24,10 @@ public class GitHubSDK implements LinkSDK{
             .get()
             .uri(url)
             .exchange((request, response) -> response.getStatusCode().is2xxSuccessful());
+    }
+
+    @Override
+    public boolean haveUpdate(String url, Long lastUpdate){
+        return false;
     }
 }
