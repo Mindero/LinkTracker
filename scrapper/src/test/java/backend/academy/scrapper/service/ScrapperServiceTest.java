@@ -44,7 +44,7 @@ class ScrapperServiceTest {
 
     @Test
     void addTrackLink_successful() throws NotSuchSDKException {
-        Track track = new Track("aboba", new ArrayList<>(), new ArrayList<>());
+        Track track = new Track(1L, "aboba", new ArrayList<>(), new ArrayList<>());
 
         when(linkSDK.validURL(track.link())).thenReturn(true);
         when(sdkList.stream()).thenReturn(Stream.of(linkSDK));
@@ -65,9 +65,9 @@ class ScrapperServiceTest {
     @Test
     void getLinkList() {
         List<Track> tracks = List.of(
-            new Track("a", List.of("a"), new ArrayList<>()),
-            new Track("b", new ArrayList<>(), List.of("b")),
-            new Track("b", new ArrayList<>(), new ArrayList<>())
+            new Track(1L, "a", List.of("a"), new ArrayList<>()),
+            new Track(1L,"b", new ArrayList<>(), List.of("b")),
+            new Track(1L, "b", new ArrayList<>(), new ArrayList<>())
         );
         List<Link> expected = List.of(
             new Link(1L, "a", List.of("a"), new ArrayList<>()),

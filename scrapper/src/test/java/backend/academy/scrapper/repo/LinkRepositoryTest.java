@@ -26,7 +26,7 @@ class LinkRepositoryTest {
 
     @Test
     void addTrack() {
-        Track track = new Track("aboba", new ArrayList<>(), new ArrayList<>());
+        Track track = new Track(1L, "aboba", new ArrayList<>(), new ArrayList<>());
 
         repo.addUser(1L);
         repo.addTrack(1L, track);
@@ -37,8 +37,8 @@ class LinkRepositoryTest {
 
     @Test
     void unTrack() {
-        Track track1 = new Track("aboba", new ArrayList<>(), new ArrayList<>());
-        Track track2 = new Track("ddd", new ArrayList<>(), new ArrayList<>());
+        Track track1 = new Track(1L, "aboba", new ArrayList<>(), new ArrayList<>());
+        Track track2 = new Track(1L, "ddd", new ArrayList<>(), new ArrayList<>());
 
         repo.addUser(1L);
         repo.addTrack(1L, track1);

@@ -1,10 +1,9 @@
 package backend.academy.scrapper.repo;
 
 import org.springframework.stereotype.Repository;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class LinkRepository {
@@ -21,6 +20,7 @@ public class LinkRepository {
     public void addTrack(Long id, Track track){
         addUser(id);
         userLinks.get(id).add(track);
+
     }
     public void unTrack(Long id, String link){
         List<Track> userTracks = userLinks.get(id);
@@ -28,5 +28,21 @@ public class LinkRepository {
     }
     public List<Track> getLinkList(Long id){
         return userLinks.getOrDefault(id, new ArrayList<>());
+    }
+
+    // TODO: add test
+    public List<Track> getALlTracks(){
+        return userLinks.values()
+            .stream()
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+    }
+
+    // TODO: add test
+    public void changeLastUpdate(Long id, String url){
+        List<Track> links = userLinks.get(id);
+        links.stream()
+            .filter(t -> t.link().equals(url))
+            .forEach(Track::setCurrentTime);
     }
 }
