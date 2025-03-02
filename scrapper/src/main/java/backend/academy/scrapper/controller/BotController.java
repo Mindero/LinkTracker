@@ -40,7 +40,10 @@ public class BotController {
                              @RequestBody AddLinkRequest linkRequest)
         throws NotSuchSDKException {
         service.addTrackLink(id,
-            new Track(linkRequest.link(), linkRequest.tags(), linkRequest.filters()));
+            new Track(id,
+                linkRequest.link(),
+                linkRequest.tags(),
+                linkRequest.filters()));
     }
     @DeleteMapping("/links")
     public void unTrack(@RequestHeader("Tg-Chat-Id") Long id,
