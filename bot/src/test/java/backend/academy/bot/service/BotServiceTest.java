@@ -1,20 +1,5 @@
 package backend.academy.bot.service;
 
-import backend.academy.bot.controller.ScrapperSender;
-import backend.academy.bot.controller.dto.ListLinkResponse;
-import backend.academy.bot.controller.dto.RemoveLinkRequest;
-import backend.academy.bot.repo.link.Link;
-import backend.academy.bot.repo.link.RepoLink;
-import backend.academy.bot.repo.state.RepoState;
-import backend.academy.bot.repo.state.StateFSM;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -23,20 +8,37 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import backend.academy.bot.controller.ScrapperSender;
+import backend.academy.bot.controller.dto.ListLinkResponse;
+import backend.academy.bot.controller.dto.RemoveLinkRequest;
+import backend.academy.bot.repo.link.Link;
+import backend.academy.bot.repo.link.RepoLink;
+import backend.academy.bot.repo.state.RepoState;
+import backend.academy.bot.repo.state.StateFSM;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 @ExtendWith(MockitoExtension.class)
 class BotServiceTest {
     @Mock
     ScrapperSender scrapperSender;
+
     @Mock
     RepoState repoState;
+
     @Mock
     RepoLink repoLink;
+
     @InjectMocks
     BotService botService;
 
     @Test
-    void handle() {
-    }
+    void handle() {}
 
     @Test
     void deleteCommand_dontDelete() {
@@ -50,11 +52,9 @@ class BotServiceTest {
         assertThat(result).isEqualTo("text text");
     }
 
-
     // TODO: добавить тест
     @Test
-    void help() {
-    }
+    void help() {}
 
     @Test
     void start() {
@@ -110,7 +110,6 @@ class BotServiceTest {
         doNothing().when(repoLink).addFilters(id, filters);
         doNothing().when(repoState).setState(id, StateFSM.COOL);
 
-
         botService.trackFilter(id, "a b");
         verify(repoLink, times(1)).addFilters(id, filters);
         verify(repoLink, times(1)).addFilters(any(), any());
@@ -119,7 +118,7 @@ class BotServiceTest {
     }
 
     @Test
-    void track_successful(){
+    void track_successful() {
         Long id = 1L;
 
         doNothing().when(scrapperSender).track(anyLong(), any());
@@ -153,10 +152,10 @@ class BotServiceTest {
     @Test
     void list_notEmptyList() {
         ListLinkResponse response = new ListLinkResponse(
-            List.of(
-                new ListLinkResponse.Link(1L, "aboba", new ArrayList<>(), new ArrayList<>()),
-                new ListLinkResponse.Link(1L, "bob", new ArrayList<>(), new ArrayList<>())),
-            2);
+                List.of(
+                        new ListLinkResponse.Link(1L, "aboba", new ArrayList<>(), new ArrayList<>()),
+                        new ListLinkResponse.Link(1L, "bob", new ArrayList<>(), new ArrayList<>())),
+                2);
 
         when(scrapperSender.getLinkList(1L)).thenReturn(response);
 

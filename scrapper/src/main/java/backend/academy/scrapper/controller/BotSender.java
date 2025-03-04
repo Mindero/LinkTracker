@@ -11,16 +11,17 @@ import org.springframework.web.client.RestClient;
 public class BotSender {
     private final RestClient restClient;
 
-    public BotSender(@Autowired @Qualifier("bot") RestClient restClient){
+    public BotSender(@Autowired @Qualifier("bot") RestClient restClient) {
         this.restClient = restClient;
     }
 
-    public void update(LinkUpdate body){
-        restClient.post()
-            .uri("/update")
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(body)
-            .retrieve()
-            .toBodilessEntity();
+    public void update(LinkUpdate body) {
+        restClient
+                .post()
+                .uri("/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(body)
+                .retrieve()
+                .toBodilessEntity();
     }
 }

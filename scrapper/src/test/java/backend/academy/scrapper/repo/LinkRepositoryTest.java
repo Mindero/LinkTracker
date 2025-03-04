@@ -1,19 +1,19 @@
 package backend.academy.scrapper.repo;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class LinkRepositoryTest {
 
     LinkRepository repo;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         repo = new LinkRepository();
     }
 

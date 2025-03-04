@@ -1,9 +1,6 @@
 package backend.academy.scrapper.repo;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +19,11 @@ public class Track {
         this.lastUpdate = lastUpdate;
     }
 
-    public Track(Long id, String link){
+    public Track(Long id, String link) {
         this(id, link, new ArrayList<>(), new ArrayList<>());
     }
-    public Track(Long id, String link, List<String> tags, List<String> filters){
+
+    public Track(Long id, String link, List<String> tags, List<String> filters) {
         this(id, link, tags, filters, ZonedDateTime.now());
     }
 
@@ -53,7 +51,7 @@ public class Track {
         this.lastUpdate = lastUpdate;
     }
 
-    public void setCurrentTime(){
+    public void setCurrentTime() {
         setLastUpdate(ZonedDateTime.now());
     }
 }

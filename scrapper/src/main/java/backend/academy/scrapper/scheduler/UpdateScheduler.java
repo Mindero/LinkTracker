@@ -5,10 +5,10 @@ import backend.academy.scrapper.controller.dto.LinkUpdate;
 import backend.academy.scrapper.repo.LinkRepository;
 import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.sdk.LinkSDK;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import java.util.List;
 
 @Component
 public class UpdateScheduler {
@@ -16,31 +16,27 @@ public class UpdateScheduler {
     private final List<LinkSDK> sdkList;
     private final BotSender botSender;
 
-    private final static  String DESCRIPTION_MSG = "Обнаружено обновление на странице ";
+    private static final String DESCRIPTION_MSG = "Обнаружено обновление на странице ";
 
-    public UpdateScheduler(@Autowired LinkRepository repository,
-                           @Autowired List<LinkSDK> linkSDKList,
-                           @Autowired BotSender sender){
+    public UpdateScheduler(
+            @Autowired LinkRepository repository, @Autowired List<LinkSDK> linkSDKList, @Autowired BotSender sender) {
         repo = repository;
         sdkList = linkSDKList;
         botSender = sender;
     }
 
     @Scheduled(fixedRate = 60000)
-    public void checkAllLinksForUpdate(){
-       List<Track> allTracks = repo.getALlTracks();
-       allTracks.forEach(this::askForUpdate);
+    public void checkAllLinksForUpdate() {
+        List<Track> allTracks = repo.getALlTracks();
+        allTracks.forEach(this::askForUpdate);
     }
 
-
-    public void askForUpdate(Track track){
-        if (sdkList.stream().anyMatch(t -> t.haveUpdate(track.link(), track.lastUpdate()))){
+    public void askForUpdate(Track track) {
+        if (sdkList.stream().anyMatch(t -> t.haveUpdate(track.link(), track.lastUpdate()))) {
             repo.changeLastUpdate(track.id(), track.link());
             System.out.println("Find something new!");
-            botSender.update(new LinkUpdate(track.id(),
-                track.link(),
-                DESCRIPTION_MSG + track.link(),
-                List.of(track.id())));
+            botSender.update(
+                    new LinkUpdate(track.id(), track.link(), DESCRIPTION_MSG + track.link(), List.of(track.id())));
         }
     }
 }

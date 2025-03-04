@@ -9,9 +9,9 @@ import org.springframework.web.client.RestClient;
 
 @Configuration
 public class BotRestClientConfig {
-    @Bean(name="bot")
+    @Bean(name = "bot")
     @Primary
-    public RestClient restClient(@Autowired BotPortConfig botPortConfig){
+    public RestClient restClient(@Autowired BotPortConfig botPortConfig) {
         String baseUrl = "http://localhost:" + botPortConfig.port() + "/";
         return RestClient.builder().baseUrl(baseUrl).build();
     }

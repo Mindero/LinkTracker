@@ -1,15 +1,14 @@
 package backend.academy.scrapper.service.sdk.stackoverflow;
 
-
 import backend.academy.scrapper.service.sdk.LinkSDK;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
 
 @Component
 public class StackOverflowSDK implements LinkSDK {
@@ -21,7 +20,7 @@ public class StackOverflowSDK implements LinkSDK {
         this.restClient = restClient;
     }
 
-    public String fetchId(String url){
+    public String fetchId(String url) {
         Pattern pattern = Pattern.compile("questions/(.*)/");
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {
@@ -36,10 +35,8 @@ public class StackOverflowSDK implements LinkSDK {
         String id = fetchId(question);
         String url = API_PREFIX + "/questions/" + id + "?site=stackoverflow";
         System.out.println("Id stackoverflow question " + id);
-        boolean result =  restClient
-            .get()
-            .uri(url)
-            .exchange((request, response) -> response.getStatusCode().is2xxSuccessful());
+        boolean result = restClient.get().uri(url).exchange((request, response) -> response.getStatusCode()
+                .is2xxSuccessful());
         System.out.println("Result of stackOverflow " + result + "\n" + url);
         return result;
     }
@@ -48,17 +45,14 @@ public class StackOverflowSDK implements LinkSDK {
     public boolean haveUpdate(String url, ZonedDateTime lastUpdate) {
         if (!url.startsWith(PREFIX)) return false;
         String id = fetchId(url);
-        String apiUrl = API_PREFIX + "/questions/" + id + "/answers?site=stackoverflow&" +
-            "fromdate=" + lastUpdate.withZoneSameInstant(ZoneOffset.UTC).toEpochSecond();
+        String apiUrl = API_PREFIX + "/questions/" + id + "/answers?site=stackoverflow&" + "fromdate="
+                + lastUpdate.withZoneSameInstant(ZoneOffset.UTC).toEpochSecond();
         System.out.println("Update stackoverflow " + apiUrl);
-        try{
-            StackOverflowUpdateResponse response = restClient.get()
-                .uri(apiUrl)
-                .retrieve()
-                .body(StackOverflowUpdateResponse.class);
+        try {
+            StackOverflowUpdateResponse response =
+                    restClient.get().uri(apiUrl).retrieve().body(StackOverflowUpdateResponse.class);
             return !response.items().isEmpty();
-        }
-        catch (Throwable throwable){
+        } catch (Throwable throwable) {
             return false;
         }
     }

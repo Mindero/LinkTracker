@@ -6,5 +6,4 @@ import org.springframework.validation.annotation.Validated;
 
 @Validated
 @ConfigurationProperties(prefix = "bot", ignoreUnknownFields = false)
-public record BotPortConfig(@NotNull String port) {
-}
+public record BotPortConfig(@NotNull String port) {}
