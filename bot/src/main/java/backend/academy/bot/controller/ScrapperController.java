@@ -1,72 +1,28 @@
 package backend.academy.bot.controller;
 
-
-import backend.academy.bot.controller.dto.AddLinkRequest;
-import backend.academy.bot.controller.dto.ListLinkResponse;
-import backend.academy.bot.controller.dto.RemoveLinkRequest;
-import backend.academy.bot.exception.DeadExternalServiceException;
+import backend.academy.bot.controller.dto.LinkUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
-import reactor.core.publisher.Mono;
-import java.util.List;
-import java.util.Map;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-@Component
+@Controller
 public class ScrapperController {
+    BotController botController;
 
-    private final RestClient restClient;
-    public ScrapperController(@Autowired RestClient restClient){
-        this.restClient = restClient;
+    public ScrapperController(@Autowired BotController botController){
+        this.botController = botController;
     }
 
-    public void addChat(Long id) {
-        restClient.post()
-            .uri("/tg-chat/{id}", id)
-            .contentType(MediaType.APPLICATION_JSON)
-            .exchange((request, response ) -> {
-                if (!response.getStatusCode().is2xxSuccessful()){
-                }
-                return response.bodyTo(Void.class);
-            });
-    }
-    public void track(Long id, AddLinkRequest addLinkRequest){
-        restClient.post()
-            .uri("/links")
-            .header("Tg-Chat-Id", id.toString())
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(addLinkRequest)
-            .exchange((request, response ) -> {
-                if (!response.getStatusCode().is2xxSuccessful()){
-                }
-                return response.bodyTo(Void.class);
-            });
-    }
-    public void untrack(Long id, RemoveLinkRequest link){
-        System.out.println("unTrack");
-        restClient.method(HttpMethod.DELETE)
-            .uri("/links")
-            .header("Tg-Chat-Id", id.toString())
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(link)
-            .exchange((request, response ) -> {
-                if (!response.getStatusCode().is2xxSuccessful()){
-                }
-                return response.bodyTo(Void.class);
-            });
-    }
-    public ListLinkResponse getLinkList(Long id){
-        return restClient.get()
-            .uri("/links")
-            .header("Tg-Chat-Id", id.toString())
-            .exchange((request, response) -> {
-                if (!response.getStatusCode().is2xxSuccessful()){
+    @PostMapping("/update")
+    public ResponseEntity<Void> getUpdates(@RequestBody LinkUpdate linkUpdate){
+        String description = linkUpdate.description();
+        System.out.println("Get update " + description);
+        linkUpdate.tgChatIds()
+            .forEach(t -> botController.sendMessage(t, description));
 
-                }
-                return response.bodyTo(ListLinkResponse.class);
-            });
+        return ResponseEntity.ok().build();
     }
 }

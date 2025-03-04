@@ -26,7 +26,7 @@ public class UpdateScheduler {
         botSender = sender;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 60000)
     public void checkAllLinksForUpdate(){
        List<Track> allTracks = repo.getALlTracks();
        allTracks.forEach(this::askForUpdate);
@@ -36,6 +36,7 @@ public class UpdateScheduler {
     public void askForUpdate(Track track){
         if (sdkList.stream().anyMatch(t -> t.haveUpdate(track.link(), track.lastUpdate()))){
             repo.changeLastUpdate(track.id(), track.link());
+            System.out.println("Find something new!");
             botSender.update(new LinkUpdate(track.id(),
                 track.link(),
                 DESCRIPTION_MSG + track.link(),

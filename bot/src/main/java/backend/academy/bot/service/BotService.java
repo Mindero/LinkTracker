@@ -7,8 +7,7 @@ import backend.academy.bot.repo.link.Link;
 import backend.academy.bot.repo.link.RepoLink;
 import backend.academy.bot.repo.state.RepoState;
 import backend.academy.bot.repo.state.StateFSM;
-import backend.academy.bot.controller.ScrapperController;
-import org.jetbrains.annotations.NotNull;
+import backend.academy.bot.controller.ScrapperSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
@@ -16,14 +15,14 @@ import java.util.List;
 
 @Service
 public class BotService {
-    private final ScrapperController scrapperController;
+    private final ScrapperSender scrapperSender;
     private final RepoState repoState;
     private final RepoLink repoLink;
 
-    public BotService(@Autowired ScrapperController controller,
+    public BotService(@Autowired ScrapperSender controller,
                       @Autowired RepoState stateRepository,
                       @Autowired RepoLink linkRepository){
-        scrapperController = controller;
+        scrapperSender = controller;
         repoState = stateRepository;
         repoLink = linkRepository;
     }
@@ -62,7 +61,7 @@ public class BotService {
     }
 
     public String start(Long id){
-        scrapperController.addChat(id);
+        scrapperSender.addChat(id);
         repoState.setState(id, StateFSM.COOL);
         return "Здравствуйте!";
     }
@@ -85,18 +84,18 @@ public class BotService {
 
     public String track(Long id) {
         Link link = repoLink.getLastChatLink(id);
-        scrapperController.track(id,
+        scrapperSender.track(id,
             new AddLinkRequest(link.url(), link.tags(), link.filters()));
         return "Ссылка успешно добавлена";
     }
 
     public String unTrack(Long id, String link){
-        scrapperController.untrack(id, new RemoveLinkRequest(link));
+        scrapperSender.untrack(id, new RemoveLinkRequest(link));
         return "Ссылка удалена";
     }
 
     public String list (Long id){
-        ListLinkResponse response = scrapperController.getLinkList(id);
+        ListLinkResponse response = scrapperSender.getLinkList(id);
         List<String> urls = response.links()
             .stream()
             .map(ListLinkResponse.Link::url)

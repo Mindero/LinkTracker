@@ -1,6 +1,6 @@
 package backend.academy.bot.service;
 
-import backend.academy.bot.controller.ScrapperController;
+import backend.academy.bot.controller.ScrapperSender;
 import backend.academy.bot.controller.dto.ListLinkResponse;
 import backend.academy.bot.controller.dto.RemoveLinkRequest;
 import backend.academy.bot.repo.link.Link;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class BotServiceTest {
     @Mock
-    ScrapperController scrapperController;
+    ScrapperSender scrapperSender;
     @Mock
     RepoState repoState;
     @Mock
@@ -60,14 +60,14 @@ class BotServiceTest {
     void start() {
         Long id = 1L;
 
-        doNothing().when(scrapperController).addChat(id);
+        doNothing().when(scrapperSender).addChat(id);
         doNothing().when(repoState).setState(id, StateFSM.COOL);
 
         String result = botService.start(id);
         assertThat(result).isEqualTo("Здравствуйте!");
         verify(repoState, times(1)).setState(id, StateFSM.COOL);
         verify(repoState, times(1)).setState(any(), any());
-        verify(scrapperController, times(1)).addChat(id);
+        verify(scrapperSender, times(1)).addChat(id);
     }
 
     @Test
@@ -122,29 +122,29 @@ class BotServiceTest {
     void track_successful(){
         Long id = 1L;
 
-        doNothing().when(scrapperController).track(anyLong(), any());
+        doNothing().when(scrapperSender).track(anyLong(), any());
         when(repoLink.getLastChatLink(id)).thenReturn(new Link("aboba", new ArrayList<>(), new ArrayList<>()));
 
         String result = botService.track(id);
         assertThat(result).isEqualTo("Ссылка успешно добавлена");
-        verify(scrapperController, times(1)).track(any(), any());
+        verify(scrapperSender, times(1)).track(any(), any());
         verify(repoLink).getLastChatLink(id);
     }
 
     @Test
     void unTrack_successful() {
-        doNothing().when(scrapperController).untrack(1L, new RemoveLinkRequest("aboba"));
+        doNothing().when(scrapperSender).untrack(1L, new RemoveLinkRequest("aboba"));
 
         String result = botService.unTrack(1L, "aboba");
         assertThat(result).isEqualTo("Ссылка удалена");
-        verify(scrapperController, times(1)).untrack(anyLong(), any());
+        verify(scrapperSender, times(1)).untrack(anyLong(), any());
     }
 
     @Test
     void list_emptyList() {
         ListLinkResponse response = new ListLinkResponse(new ArrayList<>(), 0);
 
-        when(scrapperController.getLinkList(1L)).thenReturn(response);
+        when(scrapperSender.getLinkList(1L)).thenReturn(response);
 
         String result = botService.list(1L);
         assertThat(result).isEqualTo("Список ссылок пустой");
@@ -158,7 +158,7 @@ class BotServiceTest {
                 new ListLinkResponse.Link(1L, "bob", new ArrayList<>(), new ArrayList<>())),
             2);
 
-        when(scrapperController.getLinkList(1L)).thenReturn(response);
+        when(scrapperSender.getLinkList(1L)).thenReturn(response);
 
         String result = botService.list(1L);
         String expect = "Ваш список ссылок:\naboba\nbob";

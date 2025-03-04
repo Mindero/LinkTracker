@@ -55,4 +55,8 @@ public class BotController {
             bot.execute(new SendMessage(chatId, "Произошла ошибка:\n" + e.getMessage()));
         }
     }
+
+    public void sendMessage(Long chatId, String msg){
+        bot.execute(new SendMessage(chatId, msg));
+    }
 }
