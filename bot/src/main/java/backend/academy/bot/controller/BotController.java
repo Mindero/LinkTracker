@@ -8,6 +8,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class BotController {
@@ -25,8 +26,7 @@ public class BotController {
         bot.setUpdatesListener(
                 updates -> {
 
-                    // TODO: добавить асинхронность здесь
-                    updates.forEach(this::handle);
+                    CompletableFuture.runAsync(() -> updates.forEach(this::handle));
 
                     return UpdatesListener.CONFIRMED_UPDATES_ALL;
                 },
