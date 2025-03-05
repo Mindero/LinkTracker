@@ -6,4 +6,4 @@ import org.springframework.validation.annotation.Validated;
 
 @Validated
 @ConfigurationProperties(prefix = "scrapper", ignoreUnknownFields = false)
-public record ScrapperConfig(@NotEmpty String port) {}
+public record ScrapperConfig(@NotEmpty String url) {}

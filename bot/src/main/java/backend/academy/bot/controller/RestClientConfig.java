@@ -9,7 +9,8 @@ import org.springframework.web.client.RestClient;
 public class RestClientConfig {
     @Bean
     public RestClient restClient(@Autowired ScrapperConfig scrapperConfig) {
-        String baseUrl = "http://localhost:" + scrapperConfig.port() + "/";
-        return RestClient.builder().baseUrl(baseUrl).build();
+        return RestClient.builder()
+            .baseUrl(scrapperConfig.url())
+            .build();
     }
 }
