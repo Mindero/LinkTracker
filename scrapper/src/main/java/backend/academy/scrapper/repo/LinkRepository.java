@@ -21,9 +21,9 @@ public class LinkRepository {
         userLinks.get(id).add(track);
     }
 
-    public void unTrack(Long id, String link) {
+    public boolean unTrack(Long id, String link) {
         List<Track> userTracks = userLinks.get(id);
-        userTracks.removeIf(t -> t.link().equals(link));
+        return userTracks.removeIf(t -> t.link().equals(link));
     }
 
     public List<Track> getLinkList(Long id) {

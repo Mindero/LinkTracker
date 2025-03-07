@@ -1,5 +1,6 @@
 package backend.academy.scrapper.service;
 
+import backend.academy.scrapper.exception.LinkDontExistException;
 import backend.academy.scrapper.exception.NotSuchSDKException;
 import backend.academy.scrapper.repo.LinkRepository;
 import backend.academy.scrapper.repo.Track;
@@ -31,7 +32,9 @@ public class ScrapperService {
     }
 
     public void unTrack(Long id, String link) {
-        linkRepository.unTrack(id, link);
+        if (!linkRepository.unTrack(id, link)) {
+            throw new LinkDontExistException("Такой ссылки не существует");
+        }
     }
 
     public List<Link> getLinkList(Long id) {
