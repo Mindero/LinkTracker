@@ -1,5 +1,6 @@
 package backend.academy.scrapper.service;
 
+import static java.lang.invoke.MethodHandles.catchException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
@@ -7,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import backend.academy.scrapper.exception.LinkDontExistException;
 import backend.academy.scrapper.exception.NotSuchSDKException;
 import backend.academy.scrapper.repo.LinkRepository;
 import backend.academy.scrapper.repo.Track;
@@ -56,10 +58,19 @@ class ScrapperServiceTest {
     }
 
     @Test
-    void unTrack() {
-        doNothing().when(repo).unTrack(1L, "aboba");
+    void unTrack_successful() {
+        when(repo.unTrack(1L, "aboba")).thenReturn(true);
 
         scrapperService.unTrack(1L, "aboba");
+        verify(repo, times(1)).unTrack(1L, "aboba");
+    }
+
+    @Test
+    void unTrack_exception() {
+        when(repo.unTrack(1L, "aboba")).thenReturn(false);
+
+        LinkDontExistException ex = assertThrows(LinkDontExistException.class,
+            () -> scrapperService.unTrack(1L, "aboba"));
         verify(repo, times(1)).unTrack(1L, "aboba");
     }
 
