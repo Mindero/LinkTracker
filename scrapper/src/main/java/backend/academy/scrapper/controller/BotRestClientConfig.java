@@ -12,7 +12,6 @@ public class BotRestClientConfig {
     @Bean(name = "bot")
     @Primary
     public RestClient restClient(@Autowired BotPortConfig botPortConfig) {
-        String baseUrl = "http://localhost:" + botPortConfig.port() + "/";
-        return RestClient.builder().baseUrl(baseUrl).build();
+        return RestClient.builder().baseUrl(botPortConfig.url()).build();
     }
 }

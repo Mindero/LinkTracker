@@ -5,7 +5,7 @@ app:
     access-token: ${SO_ACCESS_TOKEN}
 
 bot:
-  port: 8080
+  url: http://localhost:8080/
 
 spring:
   application:
