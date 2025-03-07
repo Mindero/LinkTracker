@@ -1,6 +1,5 @@
 package backend.academy.scrapper.service;
 
-import static java.lang.invoke.MethodHandles.catchException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
@@ -69,8 +68,8 @@ class ScrapperServiceTest {
     void unTrack_exception() {
         when(repo.unTrack(1L, "aboba")).thenReturn(false);
 
-        LinkDontExistException ex = assertThrows(LinkDontExistException.class,
-            () -> scrapperService.unTrack(1L, "aboba"));
+        LinkDontExistException ex =
+                assertThrows(LinkDontExistException.class, () -> scrapperService.unTrack(1L, "aboba"));
         verify(repo, times(1)).unTrack(1L, "aboba");
     }
 

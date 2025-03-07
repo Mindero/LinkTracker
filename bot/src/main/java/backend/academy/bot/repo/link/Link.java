@@ -44,9 +44,9 @@ public final class Link {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Link) obj;
-        return Objects.equals(this.url, that.url) &&
-                Objects.equals(this.tags, that.tags) &&
-                Objects.equals(this.filters, that.filters);
+        return Objects.equals(this.url, that.url)
+                && Objects.equals(this.tags, that.tags)
+                && Objects.equals(this.filters, that.filters);
     }
 
     @Override
@@ -56,10 +56,6 @@ public final class Link {
 
     @Override
     public String toString() {
-        return "Link[" +
-                "url=" + url + ", " +
-                "tags=" + tags + ", " +
-                "filters=" + filters + ']';
+        return "Link[" + "url=" + url + ", " + "tags=" + tags + ", " + "filters=" + filters + ']';
     }
-
 }

@@ -9,8 +9,6 @@ import org.springframework.web.client.RestClient;
 public class RestClientConfig {
     @Bean
     public RestClient restClient(@Autowired ScrapperConfig scrapperConfig) {
-        return RestClient.builder()
-            .baseUrl(scrapperConfig.url())
-            .build();
+        return RestClient.builder().baseUrl(scrapperConfig.url()).build();
     }
 }

@@ -5,12 +5,12 @@ import backend.academy.bot.controller.dto.ApiErrorResponse;
 import backend.academy.bot.controller.dto.ListLinkResponse;
 import backend.academy.bot.controller.dto.RemoveLinkRequest;
 import backend.academy.bot.exception.ScrapperException;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import java.io.IOException;
 
 @Component
 public class ScrapperSender {
@@ -59,8 +59,8 @@ public class ScrapperSender {
     }
 
     private static <T> T responseHandler(
-        RestClient.RequestHeadersSpec.ConvertibleClientHttpResponse response,
-        Class<T> acceptBodyClass) throws IOException {
+            RestClient.RequestHeadersSpec.ConvertibleClientHttpResponse response, Class<T> acceptBodyClass)
+            throws IOException {
         if (!response.getStatusCode().is2xxSuccessful()) {
             // TODO: добавить логирование
             ApiErrorResponse error = response.bodyTo(ApiErrorResponse.class);
