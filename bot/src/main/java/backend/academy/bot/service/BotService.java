@@ -19,6 +19,9 @@ public class BotService {
     private final RepoState repoState;
     private final RepoLink repoLink;
 
+    public final String DELIMITER = ";";
+    public final String DELIMITER_MSG = "Разделителем является символ " + DELIMITER;
+
     public BotService(
             @Autowired ScrapperSender controller,
             @Autowired RepoState stateRepository,
@@ -38,11 +41,16 @@ public class BotService {
         if (text.startsWith("/start")) return start(id);
         if (text.startsWith("/help")) return help();
         if (text.startsWith("/track")) return trackLink(id, deleteCommand(text));
-        if (text.startsWith("/unTrack")) return unTrack(id, deleteCommand(text));
+        if (text.startsWith("/untrack")) return unTrack(id, deleteCommand(text));
         if (text.startsWith("/list")) return list(id);
         return "Пу-пу-пу... я не понимаю ваше сообщение";
     }
 
+    /**
+     * Удаляет команду в начале сообщения, пробелы в начале и в конце
+     * @param text - сообщение пользователя
+     * @return сообщение без команды и пробелов в начале и конце
+     */
     public String deleteCommand(String text) {
         int beginIndex = 0;
         if (!text.isEmpty() && text.charAt(0) == '/') {
@@ -56,9 +64,13 @@ public class BotService {
         return text.substring(beginIndex).trim();
     }
 
-    // TODO: add help
     public String help() {
-        return "Help";
+        return """
+            /start - регистрация пользователя.
+            /help - вывод списка доступных команд.
+            /track - начать отслеживание ссылки.
+            /untrack - прекратить отслеживание ссылки.
+            /list - показать список отслеживаемых ссылок (cписок ссылок, полученных при /track)""";
     }
 
     public String start(Long id) {
@@ -70,17 +82,17 @@ public class BotService {
     public String trackLink(Long id, String link) {
         repoLink.addUrl(id, link);
         repoState.setState(id, StateFSM.TAGS);
-        return "Введите тэги (опционально)";
+        return "Введите теги (опционально)." + DELIMITER_MSG;
     }
 
     public String trackTag(Long id, String text) {
-        repoLink.addTags(id, Arrays.stream(text.split(" ")).toList());
+        repoLink.addTags(id, Arrays.stream(text.split(DELIMITER)).toList());
         repoState.setState(id, StateFSM.FILTER);
-        return "Введите фильтры (опционально)";
+        return "Введите фильтры (опционально)." + DELIMITER_MSG;
     }
 
     public void trackFilter(Long id, String text) {
-        repoLink.addFilters(id, Arrays.stream(text.split(" ")).toList());
+        repoLink.addFilters(id, Arrays.stream(text.split(DELIMITER)).toList());
         repoState.setState(id, StateFSM.COOL);
     }
 

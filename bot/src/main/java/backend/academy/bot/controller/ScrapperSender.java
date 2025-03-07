@@ -1,13 +1,16 @@
 package backend.academy.bot.controller;
 
 import backend.academy.bot.controller.dto.AddLinkRequest;
+import backend.academy.bot.controller.dto.ApiErrorResponse;
 import backend.academy.bot.controller.dto.ListLinkResponse;
 import backend.academy.bot.controller.dto.RemoveLinkRequest;
+import backend.academy.bot.exception.ScrapperException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import java.io.IOException;
 
 @Component
 public class ScrapperSender {
@@ -23,10 +26,7 @@ public class ScrapperSender {
                 .post()
                 .uri("/tg-chat/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .exchange((request, response) -> {
-                    if (!response.getStatusCode().is2xxSuccessful()) {}
-                    return response.bodyTo(Void.class);
-                });
+                .exchange((request, response) -> responseHandler(response, Void.class));
     }
 
     public void track(Long id, AddLinkRequest addLinkRequest) {
@@ -36,10 +36,7 @@ public class ScrapperSender {
                 .header("Tg-Chat-Id", id.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(addLinkRequest)
-                .exchange((request, response) -> {
-                    if (!response.getStatusCode().is2xxSuccessful()) {}
-                    return response.bodyTo(Void.class);
-                });
+                .exchange((request, response) -> responseHandler(response, Void.class));
     }
 
     public void untrack(Long id, RemoveLinkRequest link) {
@@ -50,10 +47,7 @@ public class ScrapperSender {
                 .header("Tg-Chat-Id", id.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(link)
-                .exchange((request, response) -> {
-                    if (!response.getStatusCode().is2xxSuccessful()) {}
-                    return response.bodyTo(Void.class);
-                });
+                .exchange((request, response) -> responseHandler(response, Void.class));
     }
 
     public ListLinkResponse getLinkList(Long id) {
@@ -61,10 +55,18 @@ public class ScrapperSender {
                 .get()
                 .uri("/links")
                 .header("Tg-Chat-Id", id.toString())
-                .exchange((request, response) -> {
-                    if (!response.getStatusCode().is2xxSuccessful()) {}
+                .exchange((request, response) -> responseHandler(response, ListLinkResponse.class));
+    }
 
-                    return response.bodyTo(ListLinkResponse.class);
-                });
+    private static <T> T responseHandler(
+        RestClient.RequestHeadersSpec.ConvertibleClientHttpResponse response,
+        Class<T> acceptBodyClass) throws IOException {
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            // TODO: добавить логирование
+            ApiErrorResponse error = response.bodyTo(ApiErrorResponse.class);
+            System.out.println("Поймана ошибка " + error);
+            throw new ScrapperException(error.exceptionMessage());
+        }
+        return response.bodyTo(acceptBodyClass);
     }
 }

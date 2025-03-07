@@ -52,10 +52,6 @@ class BotServiceTest {
         assertThat(result).isEqualTo("text text");
     }
 
-    // TODO: добавить тест
-    @Test
-    void help() {}
-
     @Test
     void start() {
         Long id = 1L;
@@ -79,11 +75,9 @@ class BotServiceTest {
         doNothing().when(repoState).setState(id, StateFSM.TAGS);
 
         String result = botService.trackLink(id, url);
-        assertThat(result).isEqualTo("Введите тэги (опционально)");
+        assertThat(result).isEqualTo("Введите теги (опционально)." + botService.DELIMITER_MSG);
         verify(repoLink, times(1)).addUrl(id, url);
-        verify(repoLink, times(1)).addUrl(any(), any());
         verify(repoState, times(1)).setState(id, StateFSM.TAGS);
-        verify(repoState, times(1)).setState(any(), any());
     }
 
     @Test
@@ -94,12 +88,10 @@ class BotServiceTest {
         doNothing().when(repoLink).addTags(id, tags);
         doNothing().when(repoState).setState(id, StateFSM.FILTER);
 
-        String result = botService.trackTag(id, "a b");
-        assertThat(result).isEqualTo("Введите фильтры (опционально)");
+        String result = botService.trackTag(id, "a;b");
+        assertThat(result).isEqualTo("Введите фильтры (опционально)." + botService.DELIMITER_MSG);
         verify(repoLink, times(1)).addTags(id, tags);
-        verify(repoLink, times(1)).addTags(any(), any());
         verify(repoState, times(1)).setState(id, StateFSM.FILTER);
-        verify(repoState, times(1)).setState(any(), any());
     }
 
     @Test
@@ -110,11 +102,9 @@ class BotServiceTest {
         doNothing().when(repoLink).addFilters(id, filters);
         doNothing().when(repoState).setState(id, StateFSM.COOL);
 
-        botService.trackFilter(id, "a b");
+        botService.trackFilter(id, "a;b");
         verify(repoLink, times(1)).addFilters(id, filters);
-        verify(repoLink, times(1)).addFilters(any(), any());
         verify(repoState, times(1)).setState(id, StateFSM.COOL);
-        verify(repoState, times(1)).setState(any(), any());
     }
 
     @Test

@@ -19,12 +19,12 @@ public class RepoLink {
 
     public void addTags(Long id, List<String> tags) {
         Link currentLink = lastChatLink.get(id);
-        lastChatLink.put(id, currentLink.setTags(tags));
+        currentLink.setTags(tags);
     }
 
     public void addFilters(Long id, List<String> filters) {
         Link currentLink = lastChatLink.get(id);
-        lastChatLink.put(id, currentLink.setFilters(filters));
+        currentLink.setFilters(filters);
     }
 
     public Link getLastChatLink(Long id) {

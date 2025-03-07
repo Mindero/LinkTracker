@@ -11,23 +11,20 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.CompletableFuture;
 
 @Component
-public class BotController {
+public class Bot {
     private final TelegramBot bot;
     private final BotService service;
 
-    public BotController(@Autowired BotConfig botConfig, @Autowired BotService botService) {
+    public Bot(@Autowired BotConfig botConfig, @Autowired BotService botService) {
         bot = new TelegramBot.Builder(botConfig.telegramToken()).build();
         this.service = botService;
         startListen();
     }
 
     private void startListen() {
-        // Создание Обработчика ошибок
         bot.setUpdatesListener(
                 updates -> {
-
                     CompletableFuture.runAsync(() -> updates.forEach(this::handle));
-
                     return UpdatesListener.CONFIRMED_UPDATES_ALL;
                 },
                 e -> {
@@ -36,23 +33,23 @@ public class BotController {
                         e.response().errorCode();
                         e.response().description();
                     } else {
-                        // Как видно проблема сети
+                        // TODO: добавить логирование
                         e.printStackTrace();
                     }
                 });
     }
 
-    public void handle(Update update) {
+    private void handle(Update update) {
         Long chatId = update.message().chat().id();
         String text = update.message().text();
-
         try {
             String message = service.handle(chatId, text);
-            bot.execute(new SendMessage(chatId, message));
+            sendMessage(chatId, message);
         } catch (RuntimeException e) {
+            // TODO: добавить логирование
             System.out.println("Ошибка обработки сообщения: " + e.getMessage());
             e.printStackTrace();
-            bot.execute(new SendMessage(chatId, "Произошла ошибка:\n" + e.getMessage()));
+            sendMessage(chatId, "Произошла ошибка:\n" + e.getMessage());
         }
     }
 
