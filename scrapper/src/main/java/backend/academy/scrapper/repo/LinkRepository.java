@@ -30,12 +30,10 @@ public class LinkRepository {
         return userLinks.getOrDefault(id, new ArrayList<>());
     }
 
-    // TODO: add test
     public List<Track> getALlTracks() {
         return userLinks.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 
-    // TODO: add test
     public void changeLastUpdate(Long id, String url) {
         List<Track> links = userLinks.get(id);
         links.stream().filter(t -> t.link().equals(url)).forEach(Track::setCurrentTime);
