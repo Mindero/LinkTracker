@@ -14,6 +14,7 @@ import org.springframework.web.client.RestClient;
 public class StackOverflowSDK implements LinkSDK {
     private static final String PREFIX = "https://stackoverflow.com/questions/";
     private static final String API_PREFIX = "https://api.stackexchange.com/2.3/";
+    private static final Pattern pattern = Pattern.compile("questions/(.*)/");
     private final RestClient restClient;
 
     public StackOverflowSDK(@Autowired @Qualifier("SDK") RestClient restClient) {
@@ -21,7 +22,6 @@ public class StackOverflowSDK implements LinkSDK {
     }
 
     public String fetchId(String url) {
-        Pattern pattern = Pattern.compile("questions/(.*)/");
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {
             return matcher.group(1); // Возвращаем ID вопроса
