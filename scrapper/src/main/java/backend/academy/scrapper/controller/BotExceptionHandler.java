@@ -1,6 +1,6 @@
 package backend.academy.scrapper.controller;
 
-import backend.academy.scrapper.exception.ApiError;
+import backend.academy.scrapper.controller.dto.ApiError;
 import backend.academy.scrapper.exception.LinkDontExistException;
 import backend.academy.scrapper.exception.NotSuchSDKException;
 import java.util.Arrays;

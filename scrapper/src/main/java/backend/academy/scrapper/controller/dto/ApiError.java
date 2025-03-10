@@ -1,4 +1,4 @@
-package backend.academy.scrapper.exception;
+package backend.academy.scrapper.controller.dto;
 
 import java.util.List;
 
