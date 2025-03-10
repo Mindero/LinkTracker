@@ -10,10 +10,12 @@ import backend.academy.bot.repo.state.RepoState;
 import backend.academy.bot.repo.state.StateFSM;
 import java.util.Arrays;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class BotService {
     private final ScrapperSender scrapperSender;
     private final RepoState repoState;
@@ -32,6 +34,7 @@ public class BotService {
     }
 
     public String handle(Long id, String text) {
+        log.info("id = {} Обработка сообщения {}", id, text);
         StateFSM state = repoState.getState(id);
         if (state.equals(StateFSM.TAGS)) return trackTag(id, text);
         if (state.equals(StateFSM.FILTER)) {
@@ -81,34 +84,40 @@ public class BotService {
     }
 
     public String trackLink(Long id, String link) {
+        log.info("id = {} Пользователь ввёл ссылку {}", id, link);
         repoLink.addUrl(id, link);
         repoState.setState(id, StateFSM.TAGS);
         return "Введите теги (опционально)." + DELIMITER_MSG;
     }
 
     public String trackTag(Long id, String text) {
+        log.info("id = {} Пользователь ввёл теги {}", id, text);
         repoLink.addTags(id, Arrays.stream(text.split(DELIMITER)).toList());
         repoState.setState(id, StateFSM.FILTER);
         return "Введите фильтры (опционально)." + DELIMITER_MSG;
     }
 
     public void trackFilter(Long id, String text) {
+        log.info("id = {} Пользователь ввёл фильтры {}", id, text);
         repoLink.addFilters(id, Arrays.stream(text.split(DELIMITER)).toList());
         repoState.setState(id, StateFSM.COOL);
     }
 
     public String track(Long id) {
+        log.info("id = {} Пользователь собирается отслеживать новую ссылку", id);
         Link link = repoLink.getLastChatLink(id);
         scrapperSender.track(id, new AddLinkRequest(link.url(), link.tags(), link.filters()));
         return "Ссылка успешно добавлена";
     }
 
     public String unTrack(Long id, String link) {
+        log.info("id = {} Пользователь собирается удалить ссылку", id);
         scrapperSender.untrack(id, new RemoveLinkRequest(link));
         return "Ссылка удалена";
     }
 
     public String list(Long id) {
+        log.info("id = {} Пользователь собирается получить все отслеживаемые ссылки", id);
         ListLinkResponse response = scrapperSender.getLinkList(id);
         List<String> urls =
                 response.links().stream().map(ListLinkResponse.Link::url).toList();

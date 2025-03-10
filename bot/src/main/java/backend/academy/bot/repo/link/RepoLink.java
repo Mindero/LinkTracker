@@ -3,9 +3,11 @@ package backend.academy.bot.repo.link;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Slf4j
 public class RepoLink {
     private final Map<Long, Link> lastChatLink;
 

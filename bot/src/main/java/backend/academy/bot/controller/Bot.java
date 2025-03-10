@@ -7,14 +7,17 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import java.util.concurrent.CompletableFuture;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class Bot {
     private final TelegramBot bot;
     private final BotService service;
 
+//    private final Logger
     public Bot(@Autowired BotConfig botConfig, @Autowired BotService botService) {
         bot = new TelegramBot.Builder(botConfig.telegramToken()).build();
         this.service = botService;
@@ -29,12 +32,9 @@ public class Bot {
                 },
                 e -> {
                     if (e.response() != null) {
-                        // Ошибка из Телеграма
-                        e.response().errorCode();
-                        e.response().description();
+                        log.error("Ошибка при получении сообщения из ТГ ", e);
                     } else {
-                        // TODO: добавить логирование
-                        e.printStackTrace();
+                        log.error("Ошибка при получении сообщения из ТГ");
                     }
                 });
     }
@@ -46,14 +46,13 @@ public class Bot {
             String message = service.handle(chatId, text);
             sendMessage(chatId, message);
         } catch (RuntimeException e) {
-            // TODO: добавить логирование
-            System.out.println("Ошибка обработки сообщения: " + e.getMessage());
-            e.printStackTrace();
+            log.warn("Ошибка обработки сообщения:", e);
             sendMessage(chatId, "Произошла ошибка:\n" + e.getMessage());
         }
     }
 
     public void sendMessage(Long chatId, String msg) {
+        log.info("id = {} Вывод сообщения {}", chatId, msg);
         bot.execute(new SendMessage(chatId, msg));
     }
 }

@@ -6,11 +6,13 @@ import backend.academy.scrapper.repo.LinkRepository;
 import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.sdk.LinkSDK;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class UpdateScheduler {
     private final LinkRepository repo;
     private final List<LinkSDK> sdkList;
@@ -27,14 +29,17 @@ public class UpdateScheduler {
 
     @Scheduled(fixedRate = 60000)
     public void checkAllLinksForUpdate() {
+        log.info("Планировщик начал искать обновления");
         List<Track> allTracks = repo.getALlTracks();
         allTracks.forEach(this::askForUpdate);
+        log.info("Планировщик обновлений закончил работу");
     }
 
     public void askForUpdate(Track track) {
         if (sdkList.stream().anyMatch(t -> t.haveUpdate(track.link(), track.lastUpdate()))) {
+            log.info("Нашлось обновление в ссылке {}\t время последнего обновления = {}",
+                track.link(), track.lastUpdate());
             repo.changeLastUpdate(track.id(), track.link());
-            System.out.println("Find something new!");
             botSender.update(
                     new LinkUpdate(track.id(), track.link(), DESCRIPTION_MSG + track.link(), List.of(track.id())));
         }

@@ -6,10 +6,12 @@ import backend.academy.scrapper.repo.LinkRepository;
 import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.sdk.LinkSDK;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class ScrapperService {
     private final LinkRepository linkRepository;
 
@@ -26,6 +28,7 @@ public class ScrapperService {
 
     public void addTrackLink(Long id, Track track) throws NotSuchSDKException {
         if (sdkList.stream().noneMatch(t -> t.validURL(track.link()))) {
+            log.warn("id = {} Ссылка {} не валидна", id, track);
             throw new NotSuchSDKException("Не удалось распарсить такую ссылку");
         }
         linkRepository.addTrack(id, track);
@@ -33,6 +36,7 @@ public class ScrapperService {
 
     public void unTrack(Long id, String link) {
         if (!linkRepository.unTrack(id, link)) {
+            log.warn("id = {} Не существует ссылки {}", id, link);
             throw new LinkDontExistException("Такой ссылки не существует");
         }
     }
