@@ -1,6 +1,7 @@
 package backend.academy.scrapper.repo;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +10,7 @@ public class LinkRepository {
     private final Map<Long, List<Track>> userLinks;
 
     public LinkRepository() {
-        userLinks = new HashMap<>();
+        userLinks = new ConcurrentHashMap<>();
     }
 
     public void addUser(Long id) {
