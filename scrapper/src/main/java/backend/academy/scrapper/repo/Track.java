@@ -7,13 +7,12 @@ import java.util.List;
 public class Track {
     @Override
     public String toString() {
-        return "Track{" +
-            "id=" + id +
-            ", link='" + link + '\'' +
-            ", tags=" + tags +
-            ", filters=" + filters +
-            ", lastUpdate=" + lastUpdate +
-            '}';
+        return "Track{" + "id="
+                + id + ", link='"
+                + link + '\'' + ", tags="
+                + tags + ", filters="
+                + filters + ", lastUpdate="
+                + lastUpdate + '}';
     }
 
     private final Long id;

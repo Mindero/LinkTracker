@@ -17,7 +17,7 @@ public class Bot {
     private final TelegramBot bot;
     private final BotService service;
 
-//    private final Logger
+    //    private final Logger
     public Bot(@Autowired BotConfig botConfig, @Autowired BotService botService) {
         bot = new TelegramBot.Builder(botConfig.telegramToken()).build();
         this.service = botService;

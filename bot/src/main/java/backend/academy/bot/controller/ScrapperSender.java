@@ -29,8 +29,7 @@ public class ScrapperSender {
                 .post()
                 .uri("/tg-chat/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .exchange((request, response) ->
-                    responseHandler(response, Void.class, id, "addChat"));
+                .exchange((request, response) -> responseHandler(response, Void.class, id, "addChat"));
     }
 
     public void track(Long id, AddLinkRequest addLinkRequest) {
@@ -41,8 +40,7 @@ public class ScrapperSender {
                 .header("Tg-Chat-Id", id.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(addLinkRequest)
-                .exchange((request, response) ->
-                    responseHandler(response, Void.class, id, "track"));
+                .exchange((request, response) -> responseHandler(response, Void.class, id, "track"));
     }
 
     public void untrack(Long id, RemoveLinkRequest link) {
@@ -53,26 +51,24 @@ public class ScrapperSender {
                 .header("Tg-Chat-Id", id.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(link)
-                .exchange((request, response) ->
-                    responseHandler(response, Void.class, id, "untrack"));
+                .exchange((request, response) -> responseHandler(response, Void.class, id, "untrack"));
     }
 
     public ListLinkResponse getLinkList(Long id) {
         log.info("id = {} Запрос на получение всех ссылок", id);
         return restClient
-            .get()
-            .uri("/links")
-            .header("Tg-Chat-Id", id.toString())
-            .exchange((request, response) ->
-                responseHandler(response, ListLinkResponse.class, id, "getLinkList"));
+                .get()
+                .uri("/links")
+                .header("Tg-Chat-Id", id.toString())
+                .exchange((request, response) -> responseHandler(response, ListLinkResponse.class, id, "getLinkList"));
     }
 
     private static <T> T responseHandler(
-        RestClient.RequestHeadersSpec.ConvertibleClientHttpResponse response,
-        Class<T> acceptBodyClass,
-        Long id,
-        String requestName
-    ) throws IOException {
+            RestClient.RequestHeadersSpec.ConvertibleClientHttpResponse response,
+            Class<T> acceptBodyClass,
+            Long id,
+            String requestName)
+            throws IOException {
         if (!response.getStatusCode().is2xxSuccessful()) {
             ApiErrorResponse error = response.bodyTo(ApiErrorResponse.class);
             log.warn("id = {}, Получена ошибка ошибка из Scrapper: {}", id, error);

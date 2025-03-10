@@ -37,8 +37,10 @@ public class UpdateScheduler {
 
     public void askForUpdate(Track track) {
         if (sdkList.stream().anyMatch(t -> t.haveUpdate(track.link(), track.lastUpdate()))) {
-            log.info("Нашлось обновление в ссылке {}\t время последнего обновления = {}",
-                track.link(), track.lastUpdate());
+            log.info(
+                    "Нашлось обновление в ссылке {}\t время последнего обновления = {}",
+                    track.link(),
+                    track.lastUpdate());
             repo.changeLastUpdate(track.id(), track.link());
             botSender.update(
                     new LinkUpdate(track.id(), track.link(), DESCRIPTION_MSG + track.link(), List.of(track.id())));
