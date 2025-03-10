@@ -49,7 +49,7 @@ public class GitHubSDK implements LinkSDK {
                     .body(List.class);
 
             return !updates.isEmpty();
-        } catch (Throwable throwable) {
+        } catch (Exception exception) {
             return false;
         }
     }

@@ -52,7 +52,7 @@ public class StackOverflowSDK implements LinkSDK {
             StackOverflowUpdateResponse response =
                     restClient.get().uri(apiUrl).retrieve().body(StackOverflowUpdateResponse.class);
             return !response.items().isEmpty();
-        } catch (Throwable throwable) {
+        } catch (Exception exception) {
             return false;
         }
     }
