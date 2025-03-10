@@ -1,7 +1,5 @@
 package backend.academy.scrapper.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-public record AddLinkRequest(
-        @JsonProperty String link, @JsonProperty List<String> tags, @JsonProperty List<String> filters) {}
+public record AddLinkRequest(String link, List<String> tags, List<String> filters) {}
