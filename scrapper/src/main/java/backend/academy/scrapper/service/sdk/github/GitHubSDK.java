@@ -40,7 +40,6 @@ public class GitHubSDK implements LinkSDK {
         if (!url.startsWith(PREFIX)) return false;
         String apiUrl = url.replaceFirst(PREFIX, "https://api.github.com/repos/") + "/commits?since="
                 + lastUpdate.withZoneSameInstant(ZoneOffset.UTC);
-        System.out.println("Github update url " + apiUrl);
 
         boolean result = false;
         try {
