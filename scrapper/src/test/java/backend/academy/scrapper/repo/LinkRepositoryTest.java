@@ -1,11 +1,12 @@
 package backend.academy.scrapper.repo;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,18 +23,19 @@ class LinkRepositoryTest {
     void addUser() {
         repo.addUser(1L);
 
-        assertThat(repo.getLinkList(1L)).isEqualTo(new ArrayList<>());
+        assertThat(repo.getIdLinks(1L)).isEqualTo(new HashSet<>());
     }
 
     @Test
     void addTrack() {
-        Track track = new Track(1L, "aboba", new ArrayList<>(), new ArrayList<>());
+        Track track1 = new Track(1L, "aboba", new ArrayList<>(), new ArrayList<>());
+        Track track2 = new Track(1L, "amogus", new ArrayList<>(), new ArrayList<>());
 
         repo.addUser(1L);
-        repo.addTrack(1L, track);
-        repo.addTrack(1L, track);
+        repo.addTrack(1L, track1);
+        repo.addTrack(1L, track2);
 
-        assertThat(repo.getLinkList(1L)).isEqualTo(List.of(track, track));
+        assertThat(repo.getIdLinks(1L)).isEqualTo(Set.of(track1, track2));
     }
 
     @Test
@@ -46,7 +48,7 @@ class LinkRepositoryTest {
         repo.addTrack(1L, track2);
         repo.unTrack(1L, "aboba");
 
-        assertThat(repo.getLinkList(1L)).isEqualTo(List.of(track2));
+        assertThat(repo.getIdLinks(1L)).isEqualTo(Set.of(track2));
     }
 
     @Test
@@ -59,7 +61,7 @@ class LinkRepositoryTest {
         repo.addTrack(1L, track1);
         repo.addTrack(2L, track2);
 
-        assertThat(repo.getALlTracks()).isEqualTo(List.of(track1, track2));
+        assertThat(repo.getALlTracks()).isEqualTo(Set.of(track1, track2));
     }
 
     @Test
@@ -69,11 +71,11 @@ class LinkRepositoryTest {
         repo.addTrack(1L, track1);
         repo.changeLastUpdate(1L, track1.link());
         ZonedDateTime expectedLastUpdate = ZonedDateTime.now();
-        ZonedDateTime actualLastUpdate = repo.getLinkList(1L).getFirst().lastUpdate();
+        ZonedDateTime actualLastUpdate = repo.getIdLinks(1L).stream()
+            .findFirst()
+            .get()
+            .lastUpdate();
 
-
-        assertThat(actualLastUpdate).isBetween(
-            expectedLastUpdate.minusMinutes(1),
-            expectedLastUpdate.plusMinutes(1));
+        assertThat(actualLastUpdate).isBetween(expectedLastUpdate.minusMinutes(1), expectedLastUpdate.plusMinutes(1));
     }
 }

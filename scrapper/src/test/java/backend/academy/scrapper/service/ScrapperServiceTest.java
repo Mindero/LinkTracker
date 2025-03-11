@@ -14,7 +14,9 @@ import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.sdk.LinkSDK;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -74,8 +76,8 @@ class ScrapperServiceTest {
     }
 
     @Test
-    void getLinkList() {
-        List<Track> tracks = List.of(
+    void getIdLinks() {
+        Set<Track> tracks = Set.of(
                 new Track(1L, "a", List.of("a"), new ArrayList<>()),
                 new Track(1L, "b", new ArrayList<>(), List.of("b")),
                 new Track(1L, "b", new ArrayList<>(), new ArrayList<>()));
@@ -84,11 +86,11 @@ class ScrapperServiceTest {
                 new Link(1L, "b", new ArrayList<>(), List.of("b")),
                 new Link(1L, "b", new ArrayList<>(), new ArrayList<>()));
 
-        when(repo.getLinkList(1L)).thenReturn(tracks);
+        when(repo.getIdLinks(1L)).thenReturn(tracks);
 
         List<Link> result = scrapperService.getLinkList(1L);
 
-        assertThat(result).isEqualTo(expected);
-        verify(repo, times(1)).getLinkList(1L);
+        Assertions.assertThat(result).containsExactlyInAnyOrderElementsOf(expected);
+        verify(repo, times(1)).getIdLinks(1L);
     }
 }

@@ -1,24 +1,23 @@
 package backend.academy.scrapper.repo;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@EqualsAndHashCode
+@Getter
+@ToString
 public class Track {
-    @Override
-    public String toString() {
-        return "Track{" + "id="
-                + id + ", link='"
-                + link + '\'' + ", tags="
-                + tags + ", filters="
-                + filters + ", lastUpdate="
-                + lastUpdate + '}';
-    }
-
     private final Long id;
     private final String link;
     private final List<String> tags;
     private final List<String> filters;
+    @Setter
     private ZonedDateTime lastUpdate;
 
     public Track(Long id, String link, List<String> tags, List<String> filters, ZonedDateTime lastUpdate) {
@@ -37,31 +36,7 @@ public class Track {
         this(id, link, tags, filters, ZonedDateTime.now());
     }
 
-    public Long id() {
-        return id;
-    }
-
-    public String link() {
-        return link;
-    }
-
-    public List<String> tags() {
-        return tags;
-    }
-
-    public List<String> filters() {
-        return filters;
-    }
-
-    public ZonedDateTime lastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(ZonedDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
     public void setCurrentTime() {
-        setLastUpdate(ZonedDateTime.now());
+        lastUpdate(ZonedDateTime.now());
     }
 }

@@ -6,6 +6,7 @@ import backend.academy.scrapper.repo.LinkRepository;
 import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.sdk.LinkSDK;
 import java.util.List;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,7 +31,7 @@ public class UpdateScheduler {
     @Scheduled(fixedRate = 60000)
     public void checkAllLinksForUpdate() {
         log.info("Планировщик начал искать обновления");
-        List<Track> allTracks = repo.getALlTracks();
+        Set<Track> allTracks = repo.getALlTracks();
         allTracks.forEach(this::askForUpdate);
         log.info("Планировщик обновлений закончил работу");
     }

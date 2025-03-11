@@ -42,7 +42,7 @@ public class ScrapperService {
     }
 
     public List<Link> getLinkList(Long id) {
-        return linkRepository.getLinkList(id).stream()
+        return linkRepository.getIdLinks(id).stream()
                 .map(track -> new Link(id, track.link(), track.tags(), track.filters()))
                 .toList();
     }
