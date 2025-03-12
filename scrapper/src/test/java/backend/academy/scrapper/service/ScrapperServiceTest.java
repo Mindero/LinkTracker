@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
+import backend.academy.scrapper.service.sdk.SdkEnum;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,12 +51,13 @@ class ScrapperServiceTest {
     void addTrackLink_successful() throws NotSuchSDKException {
         Track track = new Track(1L, "aboba", new ArrayList<>(), new ArrayList<>());
 
+        doNothing().when(repo).addTrack(1L, track, SdkEnum.GITHUB);
+        when(sdkList.iterator()).thenReturn(List.of(linkSDK).iterator());
         when(linkSDK.validURL(track.link())).thenReturn(true);
-        when(sdkList.stream()).thenReturn(Stream.of(linkSDK));
-        doNothing().when(repo).addTrack(1L, track);
+        when(linkSDK.getSdkEnum()).thenReturn(SdkEnum.GITHUB);
 
         scrapperService.addTrackLink(1L, track);
-        verify(repo, times(1)).addTrack(1L, track);
+        verify(repo, times(1)).addTrack(1L, track, SdkEnum.GITHUB);
     }
 
     @Test

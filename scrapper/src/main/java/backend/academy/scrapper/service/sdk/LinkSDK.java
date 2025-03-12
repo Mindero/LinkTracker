@@ -6,4 +6,6 @@ public interface LinkSDK {
     boolean validURL(String url);
 
     boolean haveUpdate(String url, ZonedDateTime lastUpdate);
+
+    SdkEnum getSdkEnum();
 }

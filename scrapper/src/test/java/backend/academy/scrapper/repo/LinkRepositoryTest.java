@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import backend.academy.scrapper.service.sdk.SdkEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,8 +33,8 @@ class LinkRepositoryTest {
         Track track2 = new Track(1L, "amogus", new ArrayList<>(), new ArrayList<>());
 
         repo.addUser(1L);
-        repo.addTrack(1L, track1);
-        repo.addTrack(1L, track2);
+        repo.addTrack(1L, track1, SdkEnum.STACKOVERFLOW);
+        repo.addTrack(1L, track2, SdkEnum.GITHUB);
 
         assertThat(repo.getIdLinks(1L)).isEqualTo(Set.of(track1, track2));
     }
@@ -44,8 +45,8 @@ class LinkRepositoryTest {
         Track track2 = new Track(1L, "ddd", new ArrayList<>(), new ArrayList<>());
 
         repo.addUser(1L);
-        repo.addTrack(1L, track1);
-        repo.addTrack(1L, track2);
+        repo.addTrack(1L, track1, SdkEnum.STACKOVERFLOW);
+        repo.addTrack(1L, track2, SdkEnum.GITHUB);
         repo.unTrack(1L, "aboba");
 
         assertThat(repo.getIdLinks(1L)).isEqualTo(Set.of(track2));
@@ -58,8 +59,8 @@ class LinkRepositoryTest {
 
         repo.addUser(1L);
         repo.addUser(2L);
-        repo.addTrack(1L, track1);
-        repo.addTrack(2L, track2);
+        repo.addTrack(1L, track1, SdkEnum.STACKOVERFLOW);
+        repo.addTrack(2L, track2, SdkEnum.GITHUB);
 
         assertThat(repo.getALlTracks()).isEqualTo(Set.of(track1, track2));
     }
@@ -68,7 +69,7 @@ class LinkRepositoryTest {
     void changeLastUpdate() {
         Track track1 = new Track(1L, "a", new ArrayList<>(), new ArrayList<>());
 
-        repo.addTrack(1L, track1);
+        repo.addTrack(1L, track1, SdkEnum.STACKOVERFLOW);
         repo.changeLastUpdate(1L, track1.link());
         ZonedDateTime expectedLastUpdate = ZonedDateTime.now();
         ZonedDateTime actualLastUpdate =

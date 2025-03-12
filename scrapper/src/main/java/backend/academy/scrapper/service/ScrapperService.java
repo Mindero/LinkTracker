@@ -27,11 +27,15 @@ public class ScrapperService {
     }
 
     public void addTrackLink(Long id, Track track) throws NotSuchSDKException {
-        if (sdkList.stream().noneMatch(t -> t.validURL(track.link()))) {
-            log.warn("id = {} Ссылка {} не валидна", id, track);
-            throw new NotSuchSDKException("Не удалось распарсить такую ссылку");
+        for (LinkSDK linkSDK : sdkList){
+            if (linkSDK.validURL(track.link())){
+                linkRepository.addTrack(id, track, linkSDK.getSdkEnum());
+                return;
+            }
         }
-        linkRepository.addTrack(id, track);
+
+        log.warn("id = {} Ссылка {} не валидна", id, track);
+        throw new NotSuchSDKException("Не удалось распарсить такую ссылку");
     }
 
     public void unTrack(Long id, String link) {

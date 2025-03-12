@@ -7,6 +7,8 @@ import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.sdk.LinkSDK;
 import java.util.List;
 import java.util.Set;
+import backend.academy.scrapper.service.sdk.SdkEnum;
+import backend.academy.scrapper.service.sdk.SdkRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,15 +17,16 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class UpdateScheduler {
     private final LinkRepository repo;
-    private final List<LinkSDK> sdkList;
     private final BotSender botSender;
+    private final SdkRegistry sdkRegistry;
 
     private static final String DESCRIPTION_MSG = "Обнаружено обновление на странице ";
 
-    public UpdateScheduler(LinkRepository repository, List<LinkSDK> linkSDKList, BotSender sender) {
+    public UpdateScheduler(LinkRepository repository,
+                           BotSender sender, SdkRegistry registry) {
         repo = repository;
-        sdkList = linkSDKList;
         botSender = sender;
+        sdkRegistry = registry;
     }
 
     @Scheduled(fixedRate = 60000)
@@ -35,7 +38,9 @@ public class UpdateScheduler {
     }
 
     public void askForUpdate(Track track) {
-        if (sdkList.stream().anyMatch(t -> t.haveUpdate(track.link(), track.lastUpdate()))) {
+        SdkEnum sdkEnum = repo.getSdkEnum(track.link());
+        LinkSDK sdk = sdkRegistry.getSdk(sdkEnum);
+        if (sdk.haveUpdate(track.link(), track.lastUpdate())) {
             log.info(
                     "Нашлось обновление в ссылке {}\t время последнего обновления = {}",
                     track.link(),

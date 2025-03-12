@@ -1,5 +1,6 @@
 package backend.academy.scrapper.service.sdk.stackoverflow;
 
+import backend.academy.scrapper.service.sdk.SdkEnum;
 import backend.academy.scrapper.service.sdk.LinkSDK;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -7,7 +8,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -45,7 +45,6 @@ public class StackOverflowSDK implements LinkSDK {
 
     @Override
     public boolean haveUpdate(String url, ZonedDateTime lastUpdate) {
-        if (!url.startsWith(PREFIX)) return false;
         Optional<String> id = fetchId(url);
         if (id.isEmpty()) return false;
         String apiUrl = API_PREFIX + "/questions/" + id.get() + "/answers?site=stackoverflow&" + "fromdate="
@@ -60,5 +59,10 @@ public class StackOverflowSDK implements LinkSDK {
         }
         log.info("Update stackoverflow url {} lastUpdate {} result {}", url, lastUpdate, result);
         return result;
+    }
+
+    @Override
+    public SdkEnum getSdkEnum(){
+        return SdkEnum.STACKOVERFLOW;
     }
 }

@@ -1,12 +1,12 @@
 package backend.academy.scrapper.service.sdk.github;
 
 import backend.academy.scrapper.ScrapperConfig;
+import backend.academy.scrapper.service.sdk.SdkEnum;
 import backend.academy.scrapper.service.sdk.LinkSDK;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -37,7 +37,6 @@ public class GitHubSDK implements LinkSDK {
 
     @Override
     public boolean haveUpdate(String url, ZonedDateTime lastUpdate) {
-        if (!url.startsWith(PREFIX)) return false;
         String apiUrl = url.replaceFirst(PREFIX, "https://api.github.com/repos/") + "/commits?since="
                 + lastUpdate.withZoneSameInstant(ZoneOffset.UTC);
 
@@ -55,5 +54,10 @@ public class GitHubSDK implements LinkSDK {
         }
         log.info("Update github url {} lastUpdate {} result {}", url, lastUpdate, result);
         return result;
+    }
+
+    @Override
+    public SdkEnum getSdkEnum(){
+        return SdkEnum.GITHUB;
     }
 }
