@@ -1,7 +1,7 @@
 package backend.academy.scrapper.scheduler;
 
+import backend.academy.dto.LinkUpdate;
 import backend.academy.scrapper.controller.BotSender;
-import backend.academy.scrapper.controller.dto.LinkUpdate;
 import backend.academy.scrapper.repo.LinkRepository;
 import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.sdk.LinkSDK;

@@ -1,6 +1,6 @@
 package backend.academy.bot.controller;
 
-import backend.academy.bot.controller.dto.LinkUpdate;
+import backend.academy.dto.LinkUpdate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

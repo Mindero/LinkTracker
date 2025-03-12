@@ -1,11 +1,11 @@
 package backend.academy.scrapper.controller;
 
-import backend.academy.scrapper.controller.dto.AddLinkRequest;
-import backend.academy.scrapper.controller.dto.ListLinkResponse;
-import backend.academy.scrapper.controller.dto.RemoveLinkRequest;
+import backend.academy.dto.AddLinkRequest;
+import backend.academy.dto.Link;
+import backend.academy.dto.ListLinkResponse;
+import backend.academy.dto.RemoveLinkRequest;
 import backend.academy.scrapper.exception.NotSuchSDKException;
 import backend.academy.scrapper.repo.Track;
-import backend.academy.scrapper.service.Link;
 import backend.academy.scrapper.service.ScrapperService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

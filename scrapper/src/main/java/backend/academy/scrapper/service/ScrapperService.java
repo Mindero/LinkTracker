@@ -1,5 +1,6 @@
 package backend.academy.scrapper.service;
 
+import backend.academy.dto.Link;
 import backend.academy.scrapper.exception.LinkDontExistException;
 import backend.academy.scrapper.exception.NotSuchSDKException;
 import backend.academy.scrapper.repo.LinkRepository;

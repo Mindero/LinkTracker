@@ -1,11 +1,11 @@
 package backend.academy.bot.controller;
 
-import backend.academy.bot.controller.dto.AddLinkRequest;
-import backend.academy.bot.controller.dto.ApiErrorResponse;
-import backend.academy.bot.controller.dto.ListLinkResponse;
-import backend.academy.bot.controller.dto.RemoveLinkRequest;
 import backend.academy.bot.exception.ScrapperException;
 import java.io.IOException;
+import backend.academy.dto.AddLinkRequest;
+import backend.academy.dto.ApiError;
+import backend.academy.dto.ListLinkResponse;
+import backend.academy.dto.RemoveLinkRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -70,7 +70,7 @@ public class ScrapperSender {
             String requestName)
             throws IOException {
         if (!response.getStatusCode().is2xxSuccessful()) {
-            ApiErrorResponse error = response.bodyTo(ApiErrorResponse.class);
+            ApiError error = response.bodyTo(ApiError.class);
             log.warn("id = {}, Получена ошибка ошибка из Scrapper: {}", id, error);
             throw new ScrapperException(error.exceptionMessage());
         }

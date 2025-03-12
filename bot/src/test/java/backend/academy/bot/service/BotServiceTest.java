@@ -9,14 +9,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import backend.academy.bot.controller.ScrapperSender;
-import backend.academy.bot.controller.dto.ListLinkResponse;
-import backend.academy.bot.controller.dto.RemoveLinkRequest;
 import backend.academy.bot.repo.link.Link;
 import backend.academy.bot.repo.link.RepoLink;
 import backend.academy.bot.repo.state.RepoState;
 import backend.academy.bot.repo.state.StateFSM;
 import java.util.ArrayList;
 import java.util.List;
+import backend.academy.dto.ListLinkResponse;
+import backend.academy.dto.RemoveLinkRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -143,8 +143,8 @@ class BotServiceTest {
     void list_notEmptyList() {
         ListLinkResponse response = new ListLinkResponse(
                 List.of(
-                        new ListLinkResponse.Link(1L, "aboba", new ArrayList<>(), new ArrayList<>()),
-                        new ListLinkResponse.Link(1L, "bob", new ArrayList<>(), new ArrayList<>())),
+                        new backend.academy.dto.Link(1L, "aboba", new ArrayList<>(), new ArrayList<>()),
+                        new backend.academy.dto.Link(1L, "bob", new ArrayList<>(), new ArrayList<>())),
                 2);
 
         when(scrapperSender.getLinkList(1L)).thenReturn(response);

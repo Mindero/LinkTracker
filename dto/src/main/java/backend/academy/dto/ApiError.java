@@ -1,4 +1,4 @@
-package backend.academy.scrapper.controller.dto;
+package backend.academy.dto;
 
 import java.util.List;
 

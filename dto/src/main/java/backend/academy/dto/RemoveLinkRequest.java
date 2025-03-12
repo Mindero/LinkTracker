@@ -1,3 +1,3 @@
-package backend.academy.scrapper.controller.dto;
+package backend.academy.dto;
 
 public record RemoveLinkRequest(String link) {}
