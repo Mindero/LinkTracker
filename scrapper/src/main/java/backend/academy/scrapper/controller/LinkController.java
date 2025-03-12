@@ -7,43 +7,27 @@ import backend.academy.dto.RemoveLinkRequest;
 import backend.academy.scrapper.exception.NotSuchSDKException;
 import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.ScrapperService;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 @Slf4j
-public class BotController {
+public class LinkController {
     private final ScrapperService service;
 
-    public BotController(ScrapperService scrapperService) {
-        service = scrapperService;
-    }
-
-    @PostMapping("/tg-chat/{id}")
-    public void addChat(@PathVariable("id") Long id) {
-        log.info("id = {} Получен запрос на добавление чата", id);
-        service.addUser(id);
-        log.info("id = {} Успешно добавился чат", id);
-    }
-
-    // TODO: add delete chat
-    @DeleteMapping("/tg-chat/{id}")
-    public void deleteChat(@PathVariable("id") Long id) {
-        log.info("id = {} Получен запрос на удаление чата", id);
-        //
-        log.info("id = {} Успешно удалился чат", id);
+    public LinkController(ScrapperService service) {
+        this.service = service;
     }
 
     @PostMapping("/links")
     public void addTrackLink(@RequestHeader("Tg-Chat-Id") Long id, @RequestBody AddLinkRequest linkRequest)
-            throws NotSuchSDKException {
+        throws NotSuchSDKException {
         log.info("id = {} Получен запрос на добавление ссылки {}", id, linkRequest);
         service.addTrackLink(id, new Track(id, linkRequest.link(), linkRequest.tags(), linkRequest.filters()));
         log.info("id = {} Успешно добавилась ссылка", id);
