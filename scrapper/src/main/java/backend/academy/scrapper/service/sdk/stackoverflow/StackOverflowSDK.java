@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -44,14 +43,13 @@ public class StackOverflowSDK implements LinkSDK {
         return result;
     }
 
-
     @Override
     public boolean haveUpdate(String url, ZonedDateTime lastUpdate) {
         if (!url.startsWith(PREFIX)) return false;
         Optional<String> id = fetchId(url);
         if (id.isEmpty()) return false;
-        String apiUrl = API_PREFIX + "/questions/" + id.get() + "/answers?site=stackoverflow&" +
-            "fromdate=" + lastUpdate.withZoneSameInstant(ZoneOffset.UTC).toEpochSecond();
+        String apiUrl = API_PREFIX + "/questions/" + id.get() + "/answers?site=stackoverflow&" + "fromdate="
+                + lastUpdate.withZoneSameInstant(ZoneOffset.UTC).toEpochSecond();
 
         boolean result = false;
         try {

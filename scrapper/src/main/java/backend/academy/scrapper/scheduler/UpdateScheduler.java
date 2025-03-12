@@ -8,7 +8,6 @@ import backend.academy.scrapper.service.sdk.LinkSDK;
 import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +20,7 @@ public class UpdateScheduler {
 
     private static final String DESCRIPTION_MSG = "Обнаружено обновление на странице ";
 
-    public UpdateScheduler(
-            @Autowired LinkRepository repository, @Autowired List<LinkSDK> linkSDKList, @Autowired BotSender sender) {
+    public UpdateScheduler(LinkRepository repository, List<LinkSDK> linkSDKList, BotSender sender) {
         repo = repository;
         sdkList = linkSDKList;
         botSender = sender;

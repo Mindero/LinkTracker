@@ -71,10 +71,8 @@ class LinkRepositoryTest {
         repo.addTrack(1L, track1);
         repo.changeLastUpdate(1L, track1.link());
         ZonedDateTime expectedLastUpdate = ZonedDateTime.now();
-        ZonedDateTime actualLastUpdate = repo.getIdLinks(1L).stream()
-            .findFirst()
-            .get()
-            .lastUpdate();
+        ZonedDateTime actualLastUpdate =
+                repo.getIdLinks(1L).stream().findFirst().get().lastUpdate();
 
         assertThat(actualLastUpdate).isBetween(expectedLastUpdate.minusMinutes(1), expectedLastUpdate.plusMinutes(1));
     }

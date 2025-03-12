@@ -1,13 +1,12 @@
 package backend.academy.scrapper.repo;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @EqualsAndHashCode
 @Getter
@@ -17,6 +16,7 @@ public class Track {
     private final String link;
     private final List<String> tags;
     private final List<String> filters;
+
     @Setter
     private ZonedDateTime lastUpdate;
 

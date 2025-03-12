@@ -9,7 +9,6 @@ import backend.academy.scrapper.service.Link;
 import backend.academy.scrapper.service.ScrapperService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BotController {
     private final ScrapperService service;
 
-    public BotController(@Autowired ScrapperService scrapperService) {
+    public BotController(ScrapperService scrapperService) {
         service = scrapperService;
     }
 

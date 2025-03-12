@@ -26,7 +26,7 @@ public class GitHubSDK implements LinkSDK {
     public boolean validURL(String url) {
         if (!url.startsWith(PREFIX)) return false;
         String apiUrl = url.replaceFirst(PREFIX, "https://api.github.com/repos/");
-        boolean result =  restClient
+        boolean result = restClient
                 .get()
                 .uri(apiUrl)
                 .header("Authorization", "Bearer " + token)

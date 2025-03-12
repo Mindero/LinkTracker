@@ -7,7 +7,6 @@ import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.sdk.LinkSDK;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +16,7 @@ public class ScrapperService {
 
     private final List<LinkSDK> sdkList;
 
-    public ScrapperService(@Autowired LinkRepository linkRepository, @Autowired List<LinkSDK> sdkList) {
+    public ScrapperService(LinkRepository linkRepository, List<LinkSDK> sdkList) {
         this.linkRepository = linkRepository;
         this.sdkList = sdkList;
     }
