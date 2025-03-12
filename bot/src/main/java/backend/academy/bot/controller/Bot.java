@@ -2,11 +2,14 @@ package backend.academy.bot.controller;
 
 import backend.academy.bot.BotConfig;
 import backend.academy.bot.service.BotService;
+import com.pengrad.telegrambot.Callback;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import com.pengrad.telegrambot.response.SendResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,8 +54,19 @@ public class Bot {
         }
     }
 
+    // Асинхронный метод
     public void sendMessage(Long chatId, String msg) {
         log.info("id = {} Вывод сообщения {}", chatId, msg);
-        bot.execute(new SendMessage(chatId, msg));
+        bot.execute(new SendMessage(chatId, msg), new Callback<SendMessage, SendResponse>() {
+            @Override
+            public void onResponse(SendMessage request, SendResponse response) {
+                log.info("id {} Результат отправления сообщения {}", chatId, response);
+            }
+
+            @Override
+            public void onFailure(SendMessage request, IOException e) {
+                log.error("id {} Не удалось отправить сообщение", chatId, e);
+            }
+        });
     }
 }
