@@ -17,8 +17,8 @@ public class GitHubSDK implements LinkSDK {
     private final RestClient restClient;
     private final String token;
 
-    public GitHubSDK(@Qualifier("SDK") RestClient restClient, ScrapperConfig scrapperConfig) {
-        this.restClient = restClient;
+    public GitHubSDK(RestClient.Builder restClientBuilder, ScrapperConfig scrapperConfig) {
+        this.restClient = restClientBuilder.build();
         token = scrapperConfig.githubToken();
     }
 

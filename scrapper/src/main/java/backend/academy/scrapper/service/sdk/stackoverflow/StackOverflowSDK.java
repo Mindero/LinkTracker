@@ -19,8 +19,8 @@ public class StackOverflowSDK implements LinkSDK {
     private static final Pattern pattern = Pattern.compile("questions/(.*)/");
     private final RestClient restClient;
 
-    public StackOverflowSDK(@Qualifier("SDK") RestClient restClient) {
-        this.restClient = restClient;
+    public StackOverflowSDK(RestClient.Builder restClientBuilder) {
+        this.restClient = restClientBuilder.build();
     }
 
     public Optional<String> fetchId(String url) {
