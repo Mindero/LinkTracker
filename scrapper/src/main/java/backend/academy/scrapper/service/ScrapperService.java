@@ -27,8 +27,8 @@ public class ScrapperService {
     }
 
     public void addTrackLink(Long id, Track track) throws NotSuchSDKException {
-        for (LinkSDK linkSDK : sdkList){
-            if (linkSDK.validURL(track.link())){
+        for (LinkSDK linkSDK : sdkList) {
+            if (linkSDK.validURL(track.link())) {
                 linkRepository.addTrack(id, track, linkSDK.getSdkEnum());
                 return;
             }

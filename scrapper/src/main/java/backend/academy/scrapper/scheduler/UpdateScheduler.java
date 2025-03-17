@@ -5,10 +5,10 @@ import backend.academy.scrapper.controller.BotSender;
 import backend.academy.scrapper.repo.LinkRepository;
 import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.sdk.LinkSDK;
-import java.util.List;
-import java.util.Set;
 import backend.academy.scrapper.service.sdk.SdkEnum;
 import backend.academy.scrapper.service.sdk.SdkRegistry;
+import java.util.List;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -22,8 +22,7 @@ public class UpdateScheduler {
 
     private static final String DESCRIPTION_MSG = "Обнаружено обновление на странице ";
 
-    public UpdateScheduler(LinkRepository repository,
-                           BotSender sender, SdkRegistry registry) {
+    public UpdateScheduler(LinkRepository repository, BotSender sender, SdkRegistry registry) {
         repo = repository;
         botSender = sender;
         sdkRegistry = registry;

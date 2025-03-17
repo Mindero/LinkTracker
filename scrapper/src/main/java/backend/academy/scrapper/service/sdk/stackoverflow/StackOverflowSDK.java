@@ -1,7 +1,7 @@
 package backend.academy.scrapper.service.sdk.stackoverflow;
 
-import backend.academy.scrapper.service.sdk.SdkEnum;
 import backend.academy.scrapper.service.sdk.LinkSDK;
+import backend.academy.scrapper.service.sdk.SdkEnum;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -62,7 +62,7 @@ public class StackOverflowSDK implements LinkSDK {
     }
 
     @Override
-    public SdkEnum getSdkEnum(){
+    public SdkEnum getSdkEnum() {
         return SdkEnum.STACKOVERFLOW;
     }
 }

@@ -1,8 +1,8 @@
 package backend.academy.scrapper.service.sdk.github;
 
 import backend.academy.scrapper.ScrapperConfig;
-import backend.academy.scrapper.service.sdk.SdkEnum;
 import backend.academy.scrapper.service.sdk.LinkSDK;
+import backend.academy.scrapper.service.sdk.SdkEnum;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -57,7 +57,7 @@ public class GitHubSDK implements LinkSDK {
     }
 
     @Override
-    public SdkEnum getSdkEnum(){
+    public SdkEnum getSdkEnum() {
         return SdkEnum.GITHUB;
     }
 }

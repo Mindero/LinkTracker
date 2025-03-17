@@ -7,6 +7,7 @@ import backend.academy.dto.RemoveLinkRequest;
 import backend.academy.scrapper.exception.NotSuchSDKException;
 import backend.academy.scrapper.repo.Track;
 import backend.academy.scrapper.service.ScrapperService;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -27,7 +27,7 @@ public class LinkController {
 
     @PostMapping("/links")
     public void addTrackLink(@RequestHeader("Tg-Chat-Id") Long id, @RequestBody AddLinkRequest linkRequest)
-        throws NotSuchSDKException {
+            throws NotSuchSDKException {
         log.info("id = {} Получен запрос на добавление ссылки {}", id, linkRequest);
         service.addTrackLink(id, new Track(id, linkRequest.link(), linkRequest.tags(), linkRequest.filters()));
         log.info("id = {} Успешно добавилась ссылка", id);

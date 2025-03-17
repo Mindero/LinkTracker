@@ -2,12 +2,12 @@ package backend.academy.scrapper.repo;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import backend.academy.scrapper.service.sdk.SdkEnum;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import backend.academy.scrapper.service.sdk.SdkEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

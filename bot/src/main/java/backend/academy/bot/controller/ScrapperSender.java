@@ -1,11 +1,11 @@
 package backend.academy.bot.controller;
 
 import backend.academy.bot.exception.ScrapperException;
-import java.io.IOException;
 import backend.academy.dto.AddLinkRequest;
 import backend.academy.dto.ApiError;
 import backend.academy.dto.ListLinkResponse;
 import backend.academy.dto.RemoveLinkRequest;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;

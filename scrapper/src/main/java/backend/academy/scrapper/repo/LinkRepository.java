@@ -1,10 +1,10 @@
 package backend.academy.scrapper.repo;
 
+import backend.academy.scrapper.service.sdk.SdkEnum;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import backend.academy.scrapper.service.sdk.SdkEnum;
-import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -47,7 +47,7 @@ public class LinkRepository {
     }
 
     @Nullable
-    public SdkEnum getSdkEnum(String url){
+    public SdkEnum getSdkEnum(String url) {
         return urlSdk.get(url);
     }
 }
